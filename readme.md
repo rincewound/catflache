@@ -55,5 +55,24 @@ Deletes a subdocument within the specified document.
 }
 ```
 
+## Usage Examples
+### Python
+This example assumes you have "requests" installed previously.
+
+Retrieving a document:
+```
+import requests
+r = requests.get("http://localhost:8000/1234")
+
+print(r.content)
+```
+
+Publishing a document:
+
+```
+import requests
+r = requests.post("http://localhost:8000/1234", json={"subdocid": "1250", "contents": "This is a test"})
+```
+
 ## Acknowledgements
-Catflache is a "code-done-quick" project and uses a ton of readily available libs, most notable Rocket.rs. It was also basically derived from a few hunks of Rocket's example code.
+Catflache is a "code-done-quick" project and uses a ton of readily available libs, most notable Rocket.rs. It was also basically derived from a few hunks of Rocket's example code
