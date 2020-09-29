@@ -1,5 +1,5 @@
 # Catflache
-A deadsimple distributed document store
+A deadsimple document store
 
 ## WTF is a "Catflache"
 Catflache is intended to be a simple in-memory datastore to share data & documents between applications running on different machines. It provides a REST-like API for storing and retrieving documents from the store.
@@ -18,7 +18,7 @@ Puts new data into the document store or updates existing data. Both documents a
 
 ```
 {
-    "subdoc_id": "subdoc_id_value",
+    "subdocid": "subdoc_id_value",
     "content": "document contents"
 }
 ```
@@ -73,6 +73,9 @@ Publishing a document:
 import requests
 r = requests.post("http://localhost:8000/1234", json={"subdocid": "1250", "contents": "This is a test"})
 ```
+
+## Configuration
+As catflache is a Rocket.rs application, you can use the checked-in Rocket.toml file to configure the application, e.g. to change ports or IP adresses to which the server should bind. 
 
 ## Acknowledgements
 Catflache is a "code-done-quick" project and uses a ton of readily available libs, most notable Rocket.rs. It was also basically derived from a few hunks of Rocket's example code

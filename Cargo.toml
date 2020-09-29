@@ -3,3 +3,6 @@ members = [
   "catcore/",
   "catflache/"
 ]
+
+[profile.release]
+opt-level=3
