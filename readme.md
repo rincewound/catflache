@@ -34,7 +34,24 @@ Retrieves the content of a given subdoc. The call will return a json body of the
 }
 ```
 
-Note that the "content" part of the response will only be present in case the status is "ok"
+GET /\<id>/
+
+Retrieves the content of a given docid. The call will return a json body of the form:
+
+```
+{
+    {
+        "subdocid": "id",
+        "content": <content>,
+    },
+    {
+        "subdocid": "id",
+        "content": <content>
+    }
+}
+```
+
+If the document doesn't exist an empty response (```{ }```) is returned.
 
 
 DELETE /\<id>
