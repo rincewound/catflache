@@ -25,7 +25,7 @@ struct Document {
     contents: Vec<Message>
 }
 
-#[post("/<id>", format = "json", data = "<message>")]
+#[put("/<id>", format = "json", data = "<message>")]
 fn new(id: ID, message: Json<Message>, context: State<catcore>) -> JsonValue {
     context.put_value(id, message);
     json!({ "status": "ok" })

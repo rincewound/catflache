@@ -12,7 +12,7 @@ Catflach uses a double-id concept, where each document can have an arbitrary num
 
 ## API
 
-POST /\<id>
+PUT /\<id>
 
 Puts new data into the document store or updates existing data. Both documents and subdocuments will be generated if they are not present. This call expects a json body of the form:
 
@@ -40,6 +40,7 @@ Retrieves the content of a given docid. The call will return a json body of the 
 
 ```
 {
+    "contents:" [
     {
         "subdocid": "id",
         "content": <content>,
@@ -48,10 +49,11 @@ Retrieves the content of a given docid. The call will return a json body of the 
         "subdocid": "id",
         "content": <content>
     }
+    ]
 }
 ```
 
-If the document doesn't exist an empty response (```{ }```) is returned.
+If the document doesn't exist an empty response (```{ "contents": [] }```) is returned.
 
 
 DELETE /\<id>
@@ -88,7 +90,7 @@ Publishing a document:
 
 ```
 import requests
-r = requests.post("http://localhost:8000/1234", json={"subdocid": "1250", "contents": "This is a test"})
+r = requests.put("http://localhost:8000/1234", json={"subdocid": "1250", "contents": "This is a test"})
 ```
 
 ## Configuration
