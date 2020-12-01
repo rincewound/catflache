@@ -20,7 +20,12 @@ struct Message {
     contents: String
 }
 
-#[post("/<id>", format = "json", data = "<message>")]
+#[derive(Serialize, Deserialize)]
+struct Document {
+    contents: Vec<Message>
+}
+
+#[put("/<id>", format = "json", data = "<message>")]
 fn new(id: ID, message: Json<Message>, context: State<catcore>) -> JsonValue {
     context.put_value(id, message);
     json!({ "status": "ok" })
@@ -29,6 +34,11 @@ fn new(id: ID, message: Json<Message>, context: State<catcore>) -> JsonValue {
 #[get("/<id>/<subdoc_id>", format = "json")]
 fn get_value(id: ID, subdoc_id: String, context: State<catcore>) -> JsonValue {
     context.get_value(id, subdoc_id)
+}
+
+#[get("/<id>")]
+fn get_document(id: ID, context: State<catcore>) -> JsonValue {
+    json!(context.get_aggregate_value(id))
 }
 
 #[delete("/<id>/<subdoc_id>", format = "json")]
@@ -95,6 +105,22 @@ impl catcore
         }
     }
 
+    pub fn get_aggregate_value(&self, id: ID) -> Document
+    {
+        let cache = self.cache.lock().expect("failed to lock cache");
+        let mut doc = Document{contents: vec![]};
+        if let Some(doc_entry) = cache.get(&id)
+        {
+            for (key, val) in doc_entry.iter()
+            {
+                let subdoc = Message{subdocid: key.clone(), contents: val.clone()};
+                doc.contents.push(subdoc);
+                
+            }
+        }
+        return doc
+    }
+
     pub fn delete_subdoc(&self, id: ID, subdoc_id: String) -> JsonValue
     {
         let mut cache = self.cache.lock().expect("failed to lock cache");
@@ -134,7 +160,7 @@ impl catcore
 pub fn launch()
 {
     rocket::ignite()
-    .mount("/", routes![new, get_value, delete_value, delete_doc])
+    .mount("/", routes![new, get_value, delete_value, delete_doc, get_document])
     .manage(catcore::new())
     .launch();
 }
